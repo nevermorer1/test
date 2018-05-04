@@ -29,7 +29,7 @@ class LoadConfig:
         return config['domain']['domain']
 
     def get_cookie_data(self):
-        # 后台用户登录，获取登录cookie，返回cookie
+        # 后台用户登录，获取后续请求header，cookie
         # file = '\conf.conf'
         sec = 'login'
         domain = self.get_config_data()
