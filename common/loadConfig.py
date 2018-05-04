@@ -36,6 +36,8 @@ class LoadConfig:
         url = domain + '/admin/login'
         request_data = self.get_request_data(self.f, sec)
         res = requests.post(url=url, data=eval(request_data['data']))
+        if res.json()['status']['err_code'] != 0:
+            raise AssertionError('login failed !')
         # print(res.cookies)
         return res.cookies
 

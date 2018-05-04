@@ -21,7 +21,9 @@ class User:
         view_path = '/user/view'
         cfg = LoadConfig()
         domain = cfg.get_config_data()
+        # print(domain)
         cookies = cfg.get_cookie_data()
+        # print(cookies)
         url = domain + view_path
         # file = '/conf.conf'
         section = 'user.view'
