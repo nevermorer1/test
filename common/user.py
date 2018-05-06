@@ -1,4 +1,5 @@
-from loadConfig import LoadConfig
+import loadConfig
+# from loadConfig import LoadConfig
 import requests
 
 
@@ -19,7 +20,7 @@ class User:
 
     def get_user_info(self):
         view_path = '/user/view'
-        cfg = LoadConfig()
+        cfg = loadConfig.LoadConfig()
         domain = cfg.get_config_data()
         # print(domain)
         cookies = cfg.get_cookie_data()
@@ -48,7 +49,7 @@ class User:
     def get_quota_change_list(self):
         # 获取用户额度修正列表
         quota_path = '/ticket/quota-change-list'
-        cfg = LoadConfig()
+        cfg = loadConfig.LoadConfig()
         domain = cfg.get_config_data()
         cookies = cfg.get_cookie_data()
         url = domain + quota_path
@@ -68,7 +69,7 @@ class User:
     def get_deposit_list(self):
         # 获取会员存款列表
         quota_path = '/ticket/deposit-list'
-        cfg = LoadConfig()
+        cfg = loadConfig.LoadConfig()
         domain = cfg.get_config_data()
         cookies = cfg.get_cookie_data()
         url = domain + quota_path
@@ -88,7 +89,7 @@ class User:
     def get_withdraw_list(self):
         # 获取取款人工审核列表
         quota_path = '/ticket/withdraw-list'
-        cfg = LoadConfig()
+        cfg = loadConfig.LoadConfig()
         domain = cfg.get_config_data()
         cookies = cfg.get_cookie_data()
         url = domain + quota_path

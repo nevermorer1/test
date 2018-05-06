@@ -1,9 +1,6 @@
 import configparser
 import os
-import warnings
 import requests
-
-warnings.filterwarnings("ignore")
 
 
 # import json
