@@ -19,6 +19,7 @@ class QuotaChangeDes(unittest.TestCase):
         section = 'send-ticket.quota-change'
         data = cfg.get_request_paras(file=self.file, section=section)
         data['user_name'] = before.username
+        data['real_name'] = before.real_name
         cookies = cfg.get_cookie_data()
         res = requests.post(url=self.url, cookies=cookies, data=data).json()
         self.assertEqual(res['status']['err_code'], 0, msg='quota-change request error')
