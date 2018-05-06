@@ -14,6 +14,7 @@ class QuotaChangeDes(unittest.TestCase):
         self.file = '\quota-change.conf'
 
     def test_corrected_type_9(self):
+        """额度转移减现金"""
         before = user.User()
         cfg = loadConfig.LoadConfig()
         section = 'send-ticket.quota-change'
