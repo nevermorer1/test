@@ -20,6 +20,7 @@ import sys
 import time
 
 sys.path.append('../cases')
+sys.path.append('../common')
 
 test_dir = '../cases'
 discover = unittest.defaultTestLoader.discover(test_dir, pattern='test_*.py')

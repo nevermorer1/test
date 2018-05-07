@@ -17,6 +17,14 @@ class User:
         self.bonus_balance = 0
         self.need_flow = 0
         self.get_user_info()
+        self.acc=[]
+        self.acc.append(self.available_money)
+        self.acc.append(self.total_in)
+        self.acc.append(self.total_out)
+        self.acc.append(self.total_profit)
+        self.acc.append(self.withdrawable_money)
+        self.acc.append(self.bonus_balance)
+        self.acc.append(self.need_flow)
 
     def get_user_info(self):
         view_path = '/user/view'
@@ -66,6 +74,17 @@ class User:
         ticket_id = res['data']['list'][0]['ticket_id']
         return ticket_id
 
+    def get_quota_ticket_id(self, num):
+        # 返回前num条额度修正ticket_id，返回值位list
+        res = self.get_quota_change_list()
+        if isinstance(num, int):
+            ticket_id = []
+            for i in range(num):
+                ticket_id.append(res['data']['list'][i]['ticket_id'])
+            return ticket_id
+        else:
+            raise AssertionError('para error !')
+
     def get_deposit_list(self):
         # 获取会员存款列表
         quota_path = '/ticket/deposit-list'
@@ -86,6 +105,17 @@ class User:
         ticket_id = res['data']['list'][0]['ticket_id']
         return ticket_id
 
+    def get_deposit_ticket_id(self, num):
+        # 返回前num条会员存款ticket_id
+        res = self.get_deposit_list()
+        if isinstance(num, int):
+            ticket_id = []
+            for i in range(num):
+                ticket_id.append(res['data']['list'][i]['ticket_id'])
+            return ticket_id
+        else:
+            raise AssertionError('para error !')
+
     def get_withdraw_list(self):
         # 获取取款人工审核列表
         quota_path = '/ticket/withdraw-list'
@@ -101,11 +131,21 @@ class User:
         return res
 
     def get_withdraw_ticket_id(self):
-        # 返回最近一条会员存款ticket_id
+        # 返回最近一条会员取款ticket_id
         res = self.get_withdraw_list()
         ticket_id = res['data']['list'][0]['ticket_id']
         return ticket_id
 
+    def get_withdraw_ticket_id(self, num=0):
+        # 返回前num条会员存款ticket_id
+        res = self.get_withdraw_list()
+        if isinstance(num, int):
+            ticket_id = []
+            for i in range(num):
+                ticket_id.append(res['data']['list'][i]['ticket_id'])
+            return ticket_id
+        else:
+            raise AssertionError('para error !')
 
 if __name__ == '__main__':
     user = User()
