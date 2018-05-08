@@ -5,6 +5,10 @@ import requests
 
 class User:
     def __init__(self):
+        self.cfg = loadConfig.LoadConfig()
+        self.domain = self.cfg.get_config_data()
+        # print(domain)
+        self.cookies = self.cfg.get_cookie_data()
         self.f = '/conf.conf'
         self.user_id = ''
         self.username = ''
@@ -17,7 +21,7 @@ class User:
         self.bonus_balance = 0
         self.need_flow = 0
         self.get_user_info()
-        self.acc=[]
+        self.acc = []
         self.acc.append(self.available_money)
         self.acc.append(self.total_in)
         self.acc.append(self.total_out)
@@ -28,17 +32,17 @@ class User:
 
     def get_user_info(self):
         view_path = '/user/view'
-        cfg = loadConfig.LoadConfig()
-        domain = cfg.get_config_data()
-        # print(domain)
-        cookies = cfg.get_cookie_data()
+        # cfg = loadConfig.LoadConfig()
+        # domain = cfg.get_config_data()
+        # # print(domain)
+        # cookies = cfg.get_cookie_data()
         # print(cookies)
-        url = domain + view_path
+        url = self.domain + view_path
         # file = '/conf.conf'
         section = 'user.view'
-        req_data = cfg.get_request_data(self.f, section)
+        req_data = self.cfg.get_request_data(self.f, section)
         data = eval(req_data['data'])
-        res = requests.post(url=url, cookies=cookies, data=data).json()
+        res = requests.post(url=url, cookies=self.cookies, data=data).json()
         # print(res)
         self.user_id = res['data']['user']['id']
         self.username = res['data']['user']['username']
@@ -57,15 +61,15 @@ class User:
     def get_quota_change_list(self):
         # 获取用户额度修正列表
         quota_path = '/ticket/quota-change-list'
-        cfg = loadConfig.LoadConfig()
-        domain = cfg.get_config_data()
-        cookies = cfg.get_cookie_data()
-        url = domain + quota_path
+        # cfg = loadConfig.LoadConfig()
+        # domain = cfg.get_config_data()
+        # cookies = cfg.get_cookie_data()
+        url = self.domain + quota_path
         section = 'ticket.quota-change-list'
         file = r'\user.conf'
-        data = cfg.get_request_paras(file, section)
+        data = self.cfg.get_request_paras(file, section)
         data['data[user_name]'] = self.username
-        res = requests.post(url=url, cookies=cookies, data=data).json()
+        res = requests.post(url=url, cookies=self.cookies, data=data).json()
         return res
 
     def get_quota_ticket_id(self):
@@ -88,15 +92,15 @@ class User:
     def get_deposit_list(self):
         # 获取会员存款列表
         quota_path = '/ticket/deposit-list'
-        cfg = loadConfig.LoadConfig()
-        domain = cfg.get_config_data()
-        cookies = cfg.get_cookie_data()
-        url = domain + quota_path
+        # cfg = loadConfig.LoadConfig()
+        # domain = cfg.get_config_data()
+        # cookies = cfg.get_cookie_data()
+        url = self.domain + quota_path
         section = 'ticket.deposit-list'
         file = r'\user.conf'
-        data = cfg.get_request_paras(file, section)
+        data = self.cfg.get_request_paras(file, section)
         data['data[user_name]'] = self.username
-        res = requests.post(url=url, cookies=cookies, data=data).json()
+        res = requests.post(url=url, cookies=self.cookies, data=data).json()
         return res
 
     def get_deposit_ticket_id(self):
@@ -119,15 +123,15 @@ class User:
     def get_withdraw_list(self):
         # 获取取款人工审核列表
         quota_path = '/ticket/withdraw-list'
-        cfg = loadConfig.LoadConfig()
-        domain = cfg.get_config_data()
-        cookies = cfg.get_cookie_data()
-        url = domain + quota_path
+        # cfg = loadConfig.LoadConfig()
+        # domain = cfg.get_config_data()
+        # cookies = cfg.get_cookie_data()
+        url = self.domain + quota_path
         section = 'ticket.withdraw-list'
         file = r'\user.conf'
-        data = cfg.get_request_paras(file, section)
+        data = self.cfg.get_request_paras(file, section)
         data['data[user_name]'] = self.username
-        res = requests.post(url=url, cookies=cookies, data=data).json()
+        res = requests.post(url=url, cookies=self.cookies, data=data).json()
         return res
 
     def get_withdraw_ticket_id(self):
@@ -146,6 +150,22 @@ class User:
             return ticket_id
         else:
             raise AssertionError('para error !')
+
+    def examine_operates(self, ticket_id, operate):
+        """ticket_id :
+           operate:1 通过   2 拒绝
+        """
+        examine_path = '/ticket/examine-operates'
+        url = self.domain + examine_path
+        section = 'ticket.examine-operates'
+        file = r'\user.conf'
+        data = self.cfg.get_request_paras(file=file, section=section)
+        data['operate'] = operate
+        data['ticket_id'] = ticket_id
+        res = requests.post(url=url, data=data, cookies=self.cookies).json()
+        if res['status']['err_code'] != 0:
+            raise AssertionError('提案审核失败！')
+
 
 if __name__ == '__main__':
     user = User()
