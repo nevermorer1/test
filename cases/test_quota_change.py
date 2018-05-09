@@ -3,7 +3,6 @@ import requests
 from common import loadConfig
 from common import user
 import sys
-import pprint
 
 sys.path.append('../common')
 
@@ -68,7 +67,7 @@ class QuotaChangeDes(unittest.TestCase):
     def test_corrected_type_des_9_money(self):
         """额度转移减现金"""
         before = user.User()
-        pprint.pprint(('before account is :', before.acc))
+        print('before account is :{0}'.format(before.acc))
         self.user_name = before.username
         self.real_name = before.real_name
         currency = 1
@@ -78,7 +77,7 @@ class QuotaChangeDes(unittest.TestCase):
         print(res)
         self.assertEqual(res['status']['err_code'], 0, msg='quota-change request error')
         after = user.User()
-        pprint.pprint(('after account is :', after.acc))
+        print('after account is :{0}'.format(after.acc))
         actual = self.compare_acc(before.acc, after.acc)
         print(actual)
         expect = [-float(self.quota_change), 0.0, 0.0, 0.0, -float(self.quota_change), 0.0, 0.0]
@@ -87,7 +86,7 @@ class QuotaChangeDes(unittest.TestCase):
     def test_corrected_type_des_9_bon(self):
         """额度转移减彩金"""
         before = user.User()
-        pprint.pprint(('before account is :', before.acc))
+        print('before account is :{0}'.format(before.acc))
         self.user_name = before.username
         self.real_name = before.real_name
         currency = 2
@@ -97,35 +96,47 @@ class QuotaChangeDes(unittest.TestCase):
         print(res)
         self.assertEqual(res['status']['err_code'], 0, msg='quota-change request error')
         after = user.User()
-        pprint.pprint(('after account is :', after.acc))
+        print('after account is :{0}'.format(after.acc))
         actual = self.compare_acc(before.acc, after.acc)
         print(actual)
         expect = [0.0, 0.0, 0.0, 0.0, 0.0, -float(self.quota_change), 0.0]
         self.assertEqual(actual, expect, msg='account error !')
 
-    # def test_corrected_type_add_9_money(self):
-    #     """额度转移加现金0倍流水"""
-    #     before = user.User()
-    #     print(before.acc)
-    #     self.user_name = before.username
-    #     self.real_name = before.real_name
-    #     currency = 1
-    #     corrected_type = 9
-    #     operation = 1
-    #     res = self.base_correct_type(currency, corrected_type, operation)
-    #     print(res)
-    #     self.assertEqual(res['status']['err_code'], 0, msg='quota-change request error')
-    #     after = user.User()
-    #     print(after.acc)
-    #     actual = self.compare_acc(before.acc, after.acc)
-    #     print(actual)
-    #     expect = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    #     self.assertEqual(actual, expect, msg='account error !')
+    def test_corrected_type_add_9_money(self):
+        """额度转移加现金0/1/2倍流水"""
+        for i in range(3):
+            print('=====额度转移加现金{0}倍流水======'.format(i))
+            before = user.User()  # 额度修正前
+            print('before account is :{0}'.format(before.acc))
+            self.user_name = before.username
+            self.real_name = before.real_name
+            currency = 1
+            corrected_type = 9
+            operation = 1
+            flow_multi = i
+            print('flow_multi is {0}'.format(flow_multi))
+            res = self.base_correct_type(currency, corrected_type, operation, flow_multi=flow_multi)
+            print(res)
+            self.assertEqual(res['status']['err_code'], 0, msg='quota-change request error')
+            after = user.User()  # 额度修正后
+            print('after account is :{0}'.format(after.acc))
+            actual_1 = self.compare_acc(before.acc, after.acc)
+            expect_1 = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            self.assertEqual(actual_1, expect_1, msg='account error !')
+
+            after.examine_operates(after.get_quota_ticket_id(num=1), 1)  # 审核通过
+
+            final = user.User()  # 审核通过后
+            print('final account is :{0}'.format(final.acc))
+            actual_2 = self.compare_acc(before.acc, final.acc)
+            expect_2 = [self.quota_change, 0.0, 0.0, 0.0,
+                        self.quota_change, 0.0, self.quota_change * flow_multi]
+            self.assertEqual(actual_2, expect_2, msg='account error !')
 
     def test_corrected_type_des_8_money(self):
         """测试账号减现金"""
         before = user.User()
-        pprint.pprint(('before account is :', before.acc))
+        print('before account is :{0}'.format(before.acc))
         self.user_name = before.username
         self.real_name = before.real_name
         currency = 1
@@ -135,7 +146,7 @@ class QuotaChangeDes(unittest.TestCase):
         print(res)
         self.assertEqual(res['status']['err_code'], 0, msg='quota-change request error')
         after = user.User()
-        pprint.pprint(('after account is :', after.acc))
+        print('after account is :{0}'.format(after.acc))
         actual = self.compare_acc(before.acc, after.acc)
         print(actual)
         expect = [-float(self.quota_change), 0.0, 0.0, 0.0, -float(self.quota_change), 0.0, 0.0]
@@ -144,7 +155,7 @@ class QuotaChangeDes(unittest.TestCase):
     def test_corrected_type_des_8_bon(self):
         """测试账号减彩金"""
         before = user.User()
-        pprint.pprint(('before account is :', before.acc))
+        print('before account is :{0}'.format(before.acc))
         self.user_name = before.username
         self.real_name = before.real_name
         currency = 2
@@ -154,7 +165,7 @@ class QuotaChangeDes(unittest.TestCase):
         print(res)
         self.assertEqual(res['status']['err_code'], 0, msg='quota-change request error')
         after = user.User()
-        pprint.pprint(('after account is :', after.acc))
+        print('after account is :{0}'.format(after.acc))
         actual = self.compare_acc(before.acc, after.acc)
         print(actual)
         expect = [0.0, 0.0, 0.0, 0.0, 0.0, -float(self.quota_change), 0.0]
