@@ -5,6 +5,7 @@ import requests
 
 class User:
     def __init__(self):
+        self.acc = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         self.cfg = loadConfig.LoadConfig()
         self.domain = self.cfg.get_config_data()
         # print(domain)
@@ -21,14 +22,9 @@ class User:
         self.bonus_balance = 0
         self.need_flow = 0
         self.get_user_info()
-        self.acc = []
-        self.acc.append(self.available_money)
-        self.acc.append(self.total_in)
-        self.acc.append(self.total_out)
-        self.acc.append(self.total_profit)
-        self.acc.append(self.withdrawable_money)
-        self.acc.append(self.bonus_balance)
-        self.acc.append(self.need_flow)
+
+    def get_user_acc(self):
+        return self.acc
 
     def get_user_info(self):
         view_path = '/user/view'
@@ -54,6 +50,13 @@ class User:
         self.withdrawable_money = float(res['data']['userAccountStats']['withdrawable_money'])
         self.bonus_balance = float(res['data']['userAccountDeposit']['bonus_balance'])
         self.need_flow = float(res['data']['userAccountDeposit']['need_flow'])
+        self.acc[0] = self.available_money
+        self.acc[1] = self.total_in
+        self.acc[2] = self.total_out
+        self.acc[3] = self.total_profit
+        self.acc[4] = self.withdrawable_money
+        self.acc[5] = self.bonus_balance
+        self.acc[6] = self.need_flow
         # print(res.status_code)
         # print(res.text)
         # print(type(res.json()))
