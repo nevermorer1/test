@@ -1,4 +1,5 @@
 import configparser
+# test
 cfg = configparser.ConfigParser()
 #f = 'E:\git\autotest_backend\config\config.ini'
 #f = 'config.ini'
