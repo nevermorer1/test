@@ -38,7 +38,8 @@ class User:
         section = 'user.view'
         req_data = self.cfg.get_request_data(self.f, section)
         data = eval(req_data['data'])
-        res = requests.post(url=url, cookies=self.cookies, data=data).json()
+        res = requests.post(url=url, cookies=self.cookies, data=data,
+                            auth=self.cfg.auth).json()
         # print(res)
         self.user_id = res['data']['user']['id']
         self.username = res['data']['user']['username']
@@ -72,7 +73,8 @@ class User:
         file = r'\user.conf'
         data = self.cfg.get_request_paras(file, section)
         data['data[user_name]'] = self.username
-        res = requests.post(url=url, cookies=self.cookies, data=data).json()
+        res = requests.post(url=url, cookies=self.cookies, data=data,
+                            auth=self.cfg.auth).json()
         return res
 
     def get_quota_ticket_id(self):
@@ -103,7 +105,8 @@ class User:
         file = r'\user.conf'
         data = self.cfg.get_request_paras(file, section)
         data['data[user_name]'] = self.username
-        res = requests.post(url=url, cookies=self.cookies, data=data).json()
+        res = requests.post(url=url, cookies=self.cookies, data=data,
+                            auth=self.cfg.auth).json()
         return res
 
     def get_deposit_ticket_id(self):
@@ -134,7 +137,8 @@ class User:
         file = r'\user.conf'
         data = self.cfg.get_request_paras(file, section)
         data['data[user_name]'] = self.username
-        res = requests.post(url=url, cookies=self.cookies, data=data).json()
+        res = requests.post(url=url, cookies=self.cookies, data=data,
+                            auth=self.cfg.auth).json()
         return res
 
     def get_withdraw_ticket_id(self):
@@ -165,7 +169,8 @@ class User:
         data = self.cfg.get_request_paras(file=file, section=section)
         data['operate'] = operate
         data['ticket_id'] = ticket_id
-        res = requests.post(url=url, data=data, cookies=self.cookies).json()
+        res = requests.post(url=url, data=data, cookies=self.cookies,
+                            auth=self.cfg.auth).json()
         if res['status']['err_code'] != 0:
             raise AssertionError('提案审核失败！')
 

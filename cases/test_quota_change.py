@@ -47,7 +47,8 @@ class QuotaChangeDes(unittest.TestCase):
         data['user_name'] = self.user_name
         data['real_name'] = self.real_name
         cookies = self.cookies
-        res = requests.post(url=self.url, cookies=cookies, data=data).json()
+        res = requests.post(url=self.url, cookies=cookies, data=data,
+                            auth=self.cfg.auth).json()
         return res
 
     def base_correct_type(self, currency, corrected_type, operation, flow_multi=0):
@@ -66,7 +67,8 @@ class QuotaChangeDes(unittest.TestCase):
         data['user_name'] = self.user_name
         data['real_name'] = self.real_name
         cookies = self.cookies
-        res = requests.post(url=self.url, cookies=cookies, data=data).json()
+        res = requests.post(url=self.url, cookies=cookies, data=data,
+                            auth=self.cfg.auth).json()
         return res
 
     def test_corrected_type_des_9_money(self):
@@ -106,7 +108,7 @@ class QuotaChangeDes(unittest.TestCase):
         self.user.examine_operates(self.user.get_quota_ticket_id(num=1), 2)  # 审核拒绝
 
         self.user.get_user_info()
-        final = copy.copy(self.user.acc)  # 审核拘谨后
+        final = copy.copy(self.user.acc)  # 审核拒绝后
         print('final account is :{0}'.format(final))
         actual_2 = compare_acc(before, final)
         expect_2 = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]

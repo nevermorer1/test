@@ -8,6 +8,17 @@ import requests
 class LoadConfig:
     def __init__(self):
         self.f = '\conf.conf'
+        self.auth = self.get_auth()
+
+    def get_auth(self):
+        file_path = os.path.abspath('..\config') + self.f
+        config = configparser.ConfigParser()
+        try:
+            config.read(file_path, encoding='utf-8')
+            # print(config.sections())
+        except Exception as e:
+            raise AssertionError("read file err !" + str(e))
+        return config['auth']['user'], config['auth']['passwd']
 
     def get_config_data(self):
         # 获取后台域名
@@ -32,13 +43,14 @@ class LoadConfig:
         domain = self.get_config_data()
         url = domain + '/admin/login'
         request_data = self.get_request_data(self.f, sec)
-        res = requests.post(url=url, data=eval(request_data['data']))
+        res = requests.post(url=url, data=eval(request_data['data']),
+                            auth=self.auth)
         if res.json()['status']['err_code'] != 0:
             raise AssertionError('login failed !')
         # print(res.cookies)
         return res.cookies
 
-    def get_request_data(self, file, section):
+    def  get_request_data(self, file, section):
         # 获取配置接口参数及请求格式
         # 返回字典res
         file_path = os.path.abspath('..\config') + file
@@ -98,6 +110,8 @@ if __name__ == '__main__':
     f = r'\user.conf'
     s = ['ticket.quota-change-list', 'ticket.deposit-list', 'ticket.withdraw-list']
     cfg = LoadConfig()
-    for i in range(len(s)):
-        # print(type(cfg.get_request_paras(f, s1)))
-        print(cfg.get_request_paras(f, s[i]))
+    print(cfg.auth)
+    print(cfg.get_cookie_data())
+    # for i in range(len(s)):
+    #     # print(type(cfg.get_request_paras(f, s1)))
+    #     print(cfg.get_request_paras(f, s[i]))
