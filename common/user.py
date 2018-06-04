@@ -77,11 +77,11 @@ class User:
                             auth=self.cfg.auth).json()
         return res
 
-    def get_quota_ticket_id(self):
-        # 返回最近的一条额度修正ticket_id
-        res = self.get_quota_change_list()
-        ticket_id = res['data']['list'][0]['ticket_id']
-        return ticket_id
+    # def get_quota_ticket_id(self):
+    #     # 返回最近的一条额度修正ticket_id
+    #     res = self.get_quota_change_list()
+    #     ticket_id = res['data']['list'][0]['ticket_id']
+    #     return ticket_id
 
     def get_quota_ticket_id(self, num):
         # 返回前num条额度修正ticket_id，返回值位list
@@ -109,11 +109,11 @@ class User:
                             auth=self.cfg.auth).json()
         return res
 
-    def get_deposit_ticket_id(self):
-        # 返回最近一条会员存款ticket_id
-        res = self.get_deposit_list()
-        ticket_id = res['data']['list'][0]['ticket_id']
-        return ticket_id
+    # def get_deposit_ticket_id(self):
+    #     # 返回最近一条会员存款ticket_id
+    #     res = self.get_deposit_list()
+    #     ticket_id = res['data']['list'][0]['ticket_id']
+    #     return ticket_id
 
     def get_deposit_ticket_id(self, num):
         # 返回前num条会员存款ticket_id
@@ -141,11 +141,11 @@ class User:
                             auth=self.cfg.auth).json()
         return res
 
-    def get_withdraw_ticket_id(self):
-        # 返回最近一条会员取款ticket_id
-        res = self.get_withdraw_list()
-        ticket_id = res['data']['list'][0]['ticket_id']
-        return ticket_id
+    # def get_withdraw_ticket_id(self):
+    #     # 返回最近一条会员取款ticket_id
+    #     res = self.get_withdraw_list()
+    #     ticket_id = res['data']['list'][0]['ticket_id']
+    #     return ticket_id
 
     def get_withdraw_ticket_id(self, num=0):
         # 返回前num条会员存款ticket_id
